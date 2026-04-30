@@ -36,7 +36,7 @@ def report_activity(order: dict) -> str:
     from azure.mgmt.containerinstance.models import (
         ContainerGroup, Container, ResourceRequirements, ResourceRequests,
         ImageRegistryCredential, EnvironmentVariable, OperatingSystemTypes,
-        ContainerGroupRestartPolicy,
+        ContainerGroupRestartPolicy, ContainerGroupIdentity, ResourceIdentityType
     )
     from azure.identity import DefaultAzureCredential
 
@@ -49,6 +49,10 @@ def report_activity(order: dict) -> str:
 
     client = ContainerInstanceManagementClient(DefaultAzureCredential(), sub_id)
     
+    # Construct the Managed Identity Resource ID
+    rollnum = rg.split("-")[-1]
+    mi_id = f"/subscriptions/{sub_id}/resourcegroups/{rg}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/mi-pa4-{rollnum}"
+    
     # TODO: Create the container group
     # Replace the `None` values below with the correct properties.
     # Hint: Follow the structure shown in the skeleton.
@@ -56,6 +60,10 @@ def report_activity(order: dict) -> str:
     # group = ContainerGroup(
     #     location=loc, os_type=OperatingSystemTypes.linux,
     #     restart_policy=ContainerGroupRestartPolicy.never,
+    #     identity=ContainerGroupIdentity(
+    #         type=ResourceIdentityType.user_assigned,
+    #         user_assigned_identities={mi_id: {}}
+    #     ),
     #     image_registry_credentials=[ImageRegistryCredential(
     #         server=os.environ["ACR_SERVER"],
     #         username=os.environ["ACR_USERNAME"],
@@ -65,9 +73,10 @@ def report_activity(order: dict) -> str:
     #         resources=ResourceRequirements(
     #             requests=ResourceRequests(cpu=1.0, memory_in_gb=1.5)),
     #         environment_variables=[
-    #             EnvironmentVariable(name="ORDER_ID",     value=order_id),
-    #             EnvironmentVariable(name="ORDER_JSON",   value=json.dumps(order)),
-    #             EnvironmentVariable(name="STORAGE_CONN", secure_value=os.environ["STORAGE_CONN"]),
+    #             EnvironmentVariable(name="ORDER_ID", value=order_id),
+    #             EnvironmentVariable(name="ORDER_JSON", value=json.dumps(order)),
+    #             EnvironmentVariable(name="STORAGE_ACCOUNT_URL", value=os.environ["STORAGE_ACCOUNT_URL"]),
+    #             EnvironmentVariable(name="AZURE_CLIENT_ID", value=os.environ["AZURE_CLIENT_ID"]),
     #         ])])
     # 
     # client.container_groups.begin_create_or_update(rg, name, group).result()
@@ -83,6 +92,5 @@ def report_activity(order: dict) -> str:
     # Clean up so it stops being a visible resource
     # client.container_groups.begin_delete(rg, name)
 
-    # account = os.environ["STORAGE_CONN"].split(";AccountName=")[1].split(";")[0]
-    # return f"https://{account}.blob.core.windows.net/reports/{order_id}.pdf"
+    # return f"{os.environ['STORAGE_ACCOUNT_URL']}/reports/{order_id}.pdf"
     pass
