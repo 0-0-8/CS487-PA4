@@ -15,11 +15,11 @@ Copy this file to <code style="color:#111827;background:#ddd6fe;padding:2px 4px;
 
 | Field | Value |
 |---|---|
-| Name | TODO |
-| Roll Number | TODO |
-| GitHub Repository URL | TODO |
-| Resource Group | `rg-sp26-TODO` |
-| Assigned Region | TODO: `uaenorth` or `ukwest` |
+| Name | Abdullah Tahir |
+| Roll Number | 27100219 |
+| GitHub Repository URL | https://github.com/0-0-8/CS487-PA4 |
+| Resource Group | `rg-sp26-27100219` |
+| Assigned Region | `ukwest` |
 
 ## Evidence Rules
 
@@ -29,32 +29,45 @@ Copy this file to <code style="color:#111827;background:#ddd6fe;padding:2px 4px;
 - CLI screenshots must show the command and output.
 - Mask secrets such as function keys, ACR passwords, and storage connection strings.
 
-
 ## Task 1: App Service Web App (15 points)
 
 ### Evidence 1.1: Forked Repository
 
-TODO: Embed screenshot of your forked GitHub repository.
+![Forked Repository](docs/ss/1.1.png)
 
-Description: TODO: Explain that this is your working fork and that it contains the PA4 starter structure.
+This screenshot shows my forked GitHub repository for the PA4 assignment. The repository contains the starter project structure including the frontend, Durable Functions app, validator API, and report job services.
+
+
 
 ### Evidence 1.2: App Service Overview
 
-TODO: Embed screenshot of the Web App overview page showing `webapp-<rollnum>` and Running status.
+![App Service Overview](docs/ss/1.2.png)
 
-Description: TODO: State the resource group, region, runtime, and public URL.
+This screenshot shows the Azure App Service overview page for `webapp-27100219`. The web app is deployed in the `rg-sp26-27100219` resource group in the `UK West` region and is publicly accessible through the shown URL.
+
+
 
 ### Evidence 1.3: Deployment Center / GitHub Actions
 
-TODO: Embed screenshot of Deployment Center or the successful GitHub Actions deployment.
+![Deployment Center](docs/ss/1.3.png)
 
-Description: TODO: Explain how the Web App is connected to your GitHub fork.
+This screenshot shows the deployment configuration connected to my GitHub fork. GitHub Actions was used to automatically deploy the frontend application to Azure App Service after pushes to the repository.
+
+
 
 ### Evidence 1.4: Live Web UI
 
-TODO: Embed screenshot of the TaskFlow page loaded in a browser.
+![Live Web UI](docs/ss/1.4.png)
 
-Description: TODO: Explain that the App Service is serving the frontend successfully.
+This screenshot shows the TaskFlow frontend successfully running in the browser. The App Service is correctly serving the frontend application publicly.
+
+
+
+### Evidence 1.5: Environment Variables
+
+![Environment Variables](docs/ss/1.5.png)
+
+This screenshot shows the environment variables being correctly set in the webapp settings.
 
 ---
 
@@ -62,21 +75,30 @@ Description: TODO: Explain that the App Service is serving the frontend successf
 
 ### Evidence 2.1: ACR Overview
 
-TODO: Embed screenshot of `crpa4<rollnum>` overview.
+![ACR Overview](docs/ss/2.1.png)
 
-Description: TODO: Identify the registry SKU and resource group.
+This screenshot shows the Azure Container Registry used in the project. The registry is deployed in the `rg-sp26-27100219` resource group and stores all container images used by AKS, ACI, and Azure Functions.
+
 
 ### Evidence 2.2: Docker Builds
 
-TODO: Embed screenshot showing successful local builds for `validate-api`, `report-job`, and `func-app`.
+![Docker Builds](docs/ss/2.2.png)
 
-Description: TODO: Explain which folder produced each image.
+This screenshot shows successful Docker image builds for `validate-api`, `report-job`, and `func-app`. Each image was built locally from its respective project folder before being pushed to ACR.
+
 
 ### Evidence 2.3: ACR Repositories
 
-TODO: Embed screenshot or CLI output showing all three repositories in ACR.
+![ACR Repositories](docs/ss/2.4.png)
+![ACR Repositories](docs/ss/2.5.png)
 
-Description: TODO: Confirm `validate-api:v1`, `report-job:v1`, and `func-app:v1` were pushed.
+This screenshot confirms that the `validate-api:v1`, `report-job:v1`, and `func-app:v1` images were successfully pushed to Azure Container Registry.
+
+### Evidence 2.4: Post Curl
+
+![Post Curl](docs/ss/2.3.png)
+
+This screenshot confirms that the post curl returns the valid output.
 
 ---
 
@@ -84,15 +106,16 @@ Description: TODO: Confirm `validate-api:v1`, `report-job:v1`, and `func-app:v1`
 
 ### Evidence 3.1: Completed Function Code
 
-TODO: Link to your completed file: `[function_app.py](function-app/function_app.py)`.
+[function_app.py](function-app/function_app.py)
 
-Description: TODO: Summarize how your orchestrator chains validation and report generation.
+The Durable Function orchestrator first calls the validator API and then triggers the report-generation workflow if validation succeeds. The orchestration manages workflow sequencing and status tracking.
+
 
 ### Evidence 3.2: Local Function Handler Listing
 
-TODO: Embed screenshot of `func start` showing the HTTP starter, orchestrator, and activities.
+![Function Handler Listing](docs/ss/3.1.png)
 
-Description: TODO: Explain that the Durable Functions runtime discovered your handlers.
+This screenshot shows the Durable Functions runtime discovering the HTTP starter, orchestrator, and activity functions during local execution using `func start`.
 
 ---
 
@@ -100,21 +123,31 @@ Description: TODO: Explain that the Durable Functions runtime discovered your ha
 
 ### Evidence 4.1: Function App Container Configuration
 
-TODO: Embed screenshot showing the Function App uses your `func-app:v1` image from ACR.
+![Function App Container](docs/ss/4.1.png)
 
-Description: TODO: State the Function App name and image URI.
+This screenshot shows that the Azure Function App is configured to use the `func-app:v1` image stored in Azure Container Registry.
+
 
 ### Evidence 4.2: Orchestration Smoke Test
 
-TODO: Embed screenshot of the `curl` output that starts an orchestration and returns status URLs.
+![Smoke Test](docs/ss/4.3.png)
 
-Description: TODO: Explain what the returned `id` and `statusQueryGetUri` prove.
+This screenshot shows a successful orchestration start request using `curl`. The returned orchestration ID and status URLs confirm that the Durable Functions runtime accepted the workflow request.
+
 
 ### Evidence 4.3: Expected Failed Status Before Downstream Wiring
 
-TODO: Embed screenshot of the status query JSON showing the expected failure before `VALIDATE_URL` is configured.
+![Expected Failure](docs/ss/4.4.png)
 
-Description: TODO: Explain why this failure is expected at this stage.
+This screenshot shows the expected orchestration failure before `VALIDATE_URL` was configured. The workflow could not contact the validator service at this stage.
+
+
+### Evidence 4.4:  Functions list in the Portal 
+
+![Expected Failure](docs/ss/4.2.png)
+
+This screenshot shows the Functions list in the Portal showing http_starter, my_orchestrator, validate_activity, report_activity
+
 
 ---
 
@@ -122,39 +155,47 @@ Description: TODO: Explain why this failure is expected at this stage.
 
 ### Evidence 5.1: AKS Cluster
 
-TODO: Embed screenshot of AKS overview showing `aks-<rollnum>` succeeded.
+![AKS Cluster](docs/ss/5.x.png)
 
-Description: TODO: State node count, node size, region, and resource group.
+This screenshot shows the AKS cluster successfully deployed in the `UK West` region under the `rg-sp26-27100219` resource group with one running node.
+
 
 ### Evidence 5.2: Kubernetes Nodes and Pods
 
-TODO: Embed screenshot of `kubectl get nodes` and `kubectl get pods`.
+![Kubernetes Nodes](docs/ss/5.1.png)
+![Kubernetes Pods](docs/ss/5.2.png)
 
-Description: TODO: Explain that the validator pod is scheduled and running.
+This screenshot shows the Kubernetes node and validator pod running successfully. The validator service is scheduled correctly inside the AKS cluster.
+
 
 ### Evidence 5.3: Kubernetes Service
 
-TODO: Embed screenshot of `kubectl get service validate-service`.
+![Kubernetes Service](docs/ss/5.3.png)
 
-Description: TODO: Identify the external IP and port exposed by the LoadBalancer.
+This screenshot shows the `validate-service` LoadBalancer service with an external public IP and exposed port used by the Durable Function validator step.
+
 
 ### Evidence 5.4: Validator API Tests
 
-TODO: Embed screenshot of `curl /health`, a valid `curl /validate`, and an invalid `curl /validate`.
+![Validator Tests](docs/ss/5.4a.png)
 
-Description: TODO: Explain the accepted path and the `qty > 100` rejection rule.
+![Validator Tests](docs/ss/5.4b.png)
 
-### Evidence 5.5: Function App `VALIDATE_URL`
+These screenshots show successful `/health` and `/validate` API tests. Orders with quantity greater than 100 are rejected according to the validator rules.
 
-TODO: Embed screenshot showing the Function App application setting `VALIDATE_URL`.
 
-Description: TODO: Explain how the Durable Function reaches the AKS validator.
+### Evidence 5.5: Function App VALIDATE_URL
+
+![VALIDATE_URL](docs/ss/5.5.png)
+
+This screenshot shows the `VALIDATE_URL` application setting configured in the Function App. The Durable Function uses this endpoint to communicate with the AKS validator service.
+
 
 ### Evidence 5.6: AKS Idle Behavior
 
-TODO: Embed AKS metrics screenshot and/or `kubectl` output after the service is idle.
+![AKS Idle Behavior](docs/ss/5.5.png)
 
-Description: TODO: Explain that the AKS node remains running even when there are no orders.
+This screenshot demonstrates that the AKS node remains active even when no requests are being processed. Kubernetes infrastructure continues running during idle periods.
 
 ---
 
@@ -162,39 +203,46 @@ Description: TODO: Explain that the AKS node remains running even when there are
 
 ### Evidence 6.1: Blob Container
 
-TODO: Embed screenshot of the `reports` blob container.
+![Blob Container](docs/ss/6.1.png)
 
-Description: TODO: Explain where generated PDFs are stored.
+This screenshot shows the `reports` blob container where generated PDF reports are stored after successful orchestration completion.
+
 
 ### Evidence 6.2: Manual ACI Run
 
-TODO: Embed screenshot of `az container show` for `ci-report-test`.
+![ACI Run](docs/ss/6.2.png)
 
-Description: TODO: State the final container state and why the job exits.
+This screenshot shows the manual ACI execution for the report-generation job. The container exits successfully after generating and uploading the PDF report.
+
 
 ### Evidence 6.3: ACI Logs
 
-TODO: Embed screenshot of `az container logs`.
+![ACI Logs](docs/ss/6.3.png)
 
-Description: TODO: Explain what the report job printed after generating and uploading the PDF.
+This screenshot shows the logs generated by the report job container. The logs confirm successful PDF creation and upload to Azure Blob Storage.
+
 
 ### Evidence 6.4: Generated PDF
 
-TODO: Embed screenshot showing `TEST-001.pdf` in Blob Storage or opened from Blob Storage.
+![Generated PDF](docs/ss/6.4.png)
 
-Description: TODO: Explain how this proves the ACI wrote to storage.
+This screenshot shows the generated PDF report stored inside the `reports` blob container. This confirms that the ACI job successfully uploaded the file.
+
 
 ### Evidence 6.5: Function App Managed Identity and IAM
 
-TODO: Embed screenshots of system-assigned identity enabled and Contributor role assignment on your resource group.
+![Managed Identity](docs/ss/6.5.png)
 
-Description: TODO: Explain why the Function App needs this permission to create ACIs.
+![IAM Roles](docs/ss/6.6.png)
+
+These screenshots show the Function App managed identity and its assigned IAM permissions. The Function App requires these permissions to create and manage ACI containers dynamically.
+
 
 ### Evidence 6.6: Report App Settings
 
-TODO: Embed screenshot of `REPORT_*`, `ACR_*`, `STORAGE_CONN`, and `SUBSCRIPTION_ID` settings.
+![Report App Settings](docs/ss/6.6.png)
 
-Description: TODO: Explain what each group of settings is used for. Mask secrets.
+This screenshot shows the `REPORT_*`, `ACR_*`, and subscription-related environment variables configured in the Function App. These settings are used for ACI deployment and report storage access.
 
 ---
 
@@ -202,27 +250,54 @@ Description: TODO: Explain what each group of settings is used for. Mask secrets
 
 ### Evidence 7.1: Web App Wiring
 
-TODO: Embed screenshot showing `FUNCTION_START_URL` and `FUNCTION_STATUS_URL` configured on the Web App.
+![Web App Wiring](docs/ss/7.1.1.png)
 
-Description: TODO: Explain how the frontend starts and polls the Durable orchestration.
+![Web App Wiring](docs/ss/7.1.2.png)
+
+![Web App Wiring](docs/ss/7.1.3.png)
+
+These screenshots show the frontend application configured with the Durable Function start and status endpoints. The frontend uses these URLs to start workflows and poll orchestration progress.
+
 
 ### Evidence 7.2: Happy Path UI
 
-TODO: Embed screenshots of the form before submit, Running status, and Completed status with report URL.
+![Happy Path](docs/ss/7.1.1.png)
 
-Description: TODO: Explain the valid order payload and final result.
+![Happy Path](docs/ss/7.1.2.png)
+
+![Happy Path](docs/ss/7.1.3.png)
+
+These screenshots show a successful end-to-end workflow execution from order submission to completed report generation with a downloadable PDF URL.
+
 
 ### Evidence 7.3: Backend Participation
 
-TODO: Embed screenshots showing Function App invocation, AKS validator evidence, ACI evidence, and Blob PDF evidence.
+![Backend Evidence](docs/ss/7.1.6.png)
 
-Description: TODO: Trace the same order ID across services.
+![Backend Evidence](docs/ss/7.1.7.png)
+
+![Backend Evidence](docs/ss/7.1.8.png)
+
+![Backend Evidence](docs/ss/7.1.4.png)
+
+![Backend Evidence](docs/ss/7.1.5-a.png)
+![Backend Evidence](docs/ss/7.1.5-b.png)
+![Backend Evidence](docs/ss/7.1.5-c.png)
+
+
+These screenshots trace the same order ID through Durable Functions, AKS validation, ACI report generation, and Blob Storage upload.
+PDF in viewer after downlaoding it from the blob storage manually.
+
 
 ### Evidence 7.4: Reject Path UI
 
-TODO: Embed screenshot of an order with `qty > 100` being rejected.
+![Reject Path](docs/ss/7.2.1-a.png)
+![Reject Path](docs/ss/7.2.1-b.png)
+![Reject Path](docs/ss/7.2.2.png)
+![Reject Path](docs/ss/7.2.3.png)
 
-Description: TODO: Explain why no report ACI should be created for this order.
+This screenshot shows an invalid order with quantity greater than 100 being rejected by the validator service. Since validation failed, no ACI report container was created.
+
 
 ---
 
@@ -230,30 +305,52 @@ Description: TODO: Explain why no report ACI should be created for this order.
 
 ### Evidence 8.1: Architecture Diagram
 
-TODO: Embed your architecture diagram from `docs/`.
+![as](docs/ss/arch.png)
 
-Description: TODO: Confirm that it shows GitHub, App Service, Durable Function, AKS, ACI, Blob Storage, ACR, and IAM.
+This diagram shows the overall TaskFlow architecture including GitHub, App Service, Durable Functions, AKS, ACI, Azure Blob Storage, Azure Container Registry, and IAM integration.
+
+---
 
 ### Question 8.2: Service Selection
 
-TODO: In 3-4 sentences each, explain why TaskFlow uses App Service, Durable Functions, AKS, and ACI for their specific roles.
+App Service is used for the frontend because it provides managed hosting for the web app with easy deployment, scaling, and HTTPS support. It simplifies hosting without requiring VM management.
+
+Durable Functions are used for workflow orchestration because the project requires multiple sequential steps like validation and report generation. They provide retries, state management, and monitoring automatically.
+
+AKS is used for the validation API because it is a continuously running containerized microservice. Kubernetes provides container orchestration, scaling, and networking support.
+
+ACI is used for PDF report generation because it is a temporary batch workload. ACI is cheaper and simpler for short-lived containers since it runs only when needed.
+
+---
 
 ### Question 8.3: ACI vs AKS
 
-TODO: Compare idle behavior, cost behavior, and operational model for AKS and ACI using your screenshots.
+AKS keeps cluster nodes running even when idle, while ACI containers run only during execution and stop afterward.
+
+AKS has higher constant cost because VMs stay active continuously. ACI follows a pay-per-use model and is cheaper for temporary workloads.
+
+AKS requires Kubernetes management and configuration. ACI is simpler because containers run directly without cluster management.
+
+---
 
 ### Question 8.4: Durable Functions vs Plain HTTP
 
-TODO: Explain at least two problems that Durable Functions solves for this sequential workflow.
+Durable Functions manage workflow state and guarantee that validation finishes before report generation starts.
+
+They also provide retries, long-running workflow support, and monitoring. Implementing this manually with plain HTTP would require custom polling and error-handling logic.
+
+---
 
 ### Question 8.5: Cost Review
 
-TODO: Embed Cost Management screenshot scoped to your resource group.
+Cost Management access was not granted for the subscription/resource group, so cost screenshots could not be retrieved.
 
-Description: TODO: Identify the most expensive resource and explain why.
+The most expensive resource is likely AKS because the Kubernetes node runs continuously even during idle periods.
+
+---
 
 ### Question 8.6: Challenges Faced
 
-TODO: Describe at least two real issues you hit and how you debugged them.
+One issue was that the Function App failed due to storage authorization errors. This was fixed by configuring Managed Identity authentication and assigning proper storage roles.
 
----
+Another issue involved storage access returning 403 errors. Debugging included checking IAM roles, storage permissions, and network restrictions before resolving the configuration problems.
