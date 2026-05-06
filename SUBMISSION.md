@@ -298,6 +298,10 @@ PDF in viewer after downlaoding it from the blob storage manually.
 
 This screenshot shows an invalid order with quantity greater than 100 being rejected by the validator service. Since validation failed, no ACI report container was created.
 
+### Evidence 7.5: All Resources
+![All resources](docs/ss/7.3.png)
+
+This screenshot shows all the resources in our resource group.
 
 ---
 
